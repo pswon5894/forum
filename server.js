@@ -7,9 +7,10 @@ const { MongoClient } = require('mongodb')
 
 const username = encodeURIComponent("<username>");
 const password = encodeURIComponent("<password>");
+const cluster = "<clusterName>";
 
 let db
-const url = 'mongodb+srv://pswon5894_db_user:${password}@cluster0.gpc6rzd.mongodb.net/?appName=Cluster0'
+const url = 'mongodb+srv://${username}:${password}@cluster0.gpc6rzd.mongodb.net/?appName=Cluster0'
 new MongoClient(url).connect().then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
