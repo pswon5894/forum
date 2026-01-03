@@ -4,13 +4,14 @@ const app = express()
 app.use(express.static(__dirname + '/public'))
 
 const { MongoClient } = require('mongodb')
+const config = require("./dev");
 
-const username = encodeURIComponent("<username>");
-const password = encodeURIComponent("<password>");
-const cluster = "<clusterName>";
+
+const username = encodeURIComponent(config.DB_USERNAME);
+const password = encodeURIComponent(config.DB_PASSWORD);
 
 let db
-const url = 'mongodb+srv://${username}:${password}@cluster0.gpc6rzd.mongodb.net/?appName=Cluster0'
+const url = `mongodb+srv://${username}:${password}@cluster0.gpc6rzd.mongodb.net/?appName=Cluster0`
 new MongoClient(url).connect().then((client)=>{
   console.log('DB연결성공')
   db = client.db('forum')
@@ -26,5 +27,6 @@ app.get('/', (요청, 응답) => {
 }) 
 
 app.get('/news', (요청, 응답) => {
-  응답.send('오늘 비옴')
+  db.collection('post').insertOne({title : '테스트'})
+  // 응답.send('오늘 비옴')
 }) 
