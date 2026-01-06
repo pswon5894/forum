@@ -123,3 +123,11 @@ app.put('/edit', async (요청, 응답) => {
   console.log(result)
   응답.redirect('/list')
 })
+
+// app.del('/delete', async (요청, 응답) => {
+
+//   let result = await db.collection('post').updateOne({_id : new ObjectId (요청.body.id)},
+//     {$set :{ title : 요청.body.title , content : 요청.body.content }}
+//   )
+//   응답.redirect('/list')
+// })
