@@ -85,4 +85,13 @@ instagram.com/explore/tags/food
 bbc 뉴스 페북 계정 사진들
 해시태그 #food 달린 인스타 사진
 
+서버로 데이터를 보내는 방법
+ajax, query string, URL parameter
+URL 파라미터를 이용해서 API를 만들기
+
+URL 파라미터 / query string 의 장점은
+둘 다 아무 API로 GET, POST, PUT, DELETE 요청할 때 전부 쓸 수 있다는게 장점,
+단점은 URL에 정보가 노출 
+그래서 짧고 안중요한 데이터 전송하는데 쓰는게 좋음
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
