@@ -17,8 +17,8 @@
     <div class="list-box">
     <h4>
         <a href="/detail/<%= 글목록[i]._id %>"><%= 글목록[i].title %></a>
-        <a href="/edit/<%= 글목록[i]._id %>">수정 버튼</a>
-        <span>삭제버튼</span>
+        <a href="/edit/<%= 글목록[i]._id %>">✏️</a>
+        <span class="delete" data-id="<%= 글목록[i]._id %>">🗑️</span>
         <!-- 삭제는 ajax로 구성, 수정버튼 처럼 구성해도 되긴함 -->
     </h4>    <!-- 서버사이드 렌더링 -->
     <p>글내용임</p>
@@ -28,13 +28,15 @@
 </div>
 
 <script>
-    document.querySelectorAll('.delete')[0].addEventListener
-    ('click', function(){
-        fetch('/abc', {
+    // console.log('<%= 글목록[0].id %>')
+    document.querySelectorAll('.delete')[0]
+    .addEventListener('click', function(e){
+        fetch('/delete?docid=' + e.target.dataset.id, {
+            // _id 를 쿼리스트링으로 보내면 
                     // ajax는 새로고침이 없다
-            method : 'POST',
-            headers : {'Content-Type':'application/json'},
-            body : JSON.stringify({a:1})
+            method : 'DELETE',
+            // headers : {'Content-Type':'application/json'},
+            // body : JSON.stringify({a:1})
         })
 // - headers 는 부가정보 기입란인데 저렇게 작성해야 array, object 데이터를 서버로 잘 전송할 수 있습니다. 
 // - body 안에는 서버로 전송할 array, object 데이터를 집어넣으면 됩니다. 근데 array, object 를 그냥 넣으면 깨지기 때문에 JSON.stringify() 를 써서 문자형태로 (JSON형태로) 바꿔서 전송

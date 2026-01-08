@@ -41,7 +41,7 @@ app.get('/news', (요청, 응답) => {
 
 app.get('/list', async (요청, 응답) => {
   result = await db.collection('post').find().toArray()
-  console.log(result[0].title)
+  // console.log(result[0].title)
   // 응답.send(result[0].title)
   응답.render('list.ejs', {글목록 : result})
 }) 
@@ -109,7 +109,7 @@ app.get('/edit/:id', async (요청, 응답) => {
   let result = await db.collection('post').findOne({
     _id: new ObjectId(요청.params.id)
   })
-  console.log(result)
+  // console.log(result)
   응답.render('edit.ejs', {result : result})
 })
 
@@ -124,10 +124,14 @@ app.put('/edit', async (요청, 응답) => {
   응답.redirect('/list')
 })
 
-app.del('/delete', async (요청, 응답) => {
+app.delete('/delete', async (요청, 응답) => {
+  console.log(요청.query)
+  // db에 있던 document 삭제
+  await db.collection('post').deleteOne({_id: new ObjectId(요청.query.docid) })
+  응답.send('삭제완료')
 
-  let result = await db.collection('post').updateOne({_id : new ObjectId (요청.body.id)},
-    {$set :{ title : 요청.body.title , content : 요청.body.content }}
-  )
-  응답.redirect('/list')
+  // let result = await db.collection('post').updateOne({_id : new ObjectId (요청.body.id)},
+  //   {$set :{ title : 요청.body.title , content : 요청.body.content }}
+  // )
+  // 응답.redirect('/list')
 })
