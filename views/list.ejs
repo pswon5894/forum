@@ -24,10 +24,19 @@
     <p>글내용임</p>
   </div>
     <% } %>
-  
 </div>
 
+<a href="/list/next/<%= 글목록[글목록.length - 1].id %>">다음</a>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+<!-- axios 라이브러리 -->
+
 <script>
+
+    // axios.get('URL').then((r)=> { console.l0g(r)
+
+    // })
+
 //     // console.log('<%= 글목록[0].id %>')
 //     document.querySelectorAll('.delete')[0]
 //     .addEventListener('click', function(e){
@@ -46,25 +55,25 @@
 // // - body 안에는 서버로 전송할 array, object 데이터를 집어넣으면 됩니다. 근데 array, object 를 그냥 넣으면 깨지기 때문에 JSON.stringify() 를 써서 문자형태로 (JSON형태로) 바꿔서 전송
 //     })
 
-    fetch('/URL')
-    .then((r)=>{
-    if(r.status == 200) {
-        return r.json()
-    } else {
-        //서버가 에러코드전송시 실행할코드
-        alert('에러남')
-    }
-    })
-    .then((result)=>{ 
-    //성공시 실행할코드
-    }).catch((error)=>{
-    //인터넷문제 등으로 실패시 실행할코드
-    console.log(error)
-    })
+    // fetch('/URL')
+    // .then((r)=>{
+    // if(r.status == 200) {
+    //     return r.json()
+    // } else {
+    //     //서버가 에러코드전송시 실행할코드
+    //     alert('에러남')
+    // }
+    // })
+    // .then((result)=>{ 
+    // //성공시 실행할코드
+    // }).catch((error)=>{
+    // //인터넷문제 등으로 실패시 실행할코드
+    // console.log(error)
+    // })
     // AJAX 에러처리 
 
     for (let i =0; i < '<%= 글목록.length %>'; i++){
-        document.querySelectorAll('.delete')[0]
+        document.querySelectorAll('.delete')[i]
             .addEventListener('click', function(e){
                 fetch('/delete?docid=' + e.target.dataset.id, {
                     // _id 를 쿼리스트링으로 보내면 
@@ -76,6 +85,7 @@
                 .then((r)=>r.text())
                 .then((r)=>{
                     e.target.parentElement.parentElement.style.display = 'none'
+                    // 삭제버튼 누르면 해당 html 부모의 부모 요소 안보이게
                 })
         // - headers 는 부가정보 기입란인데 저렇게 작성해야 array, object 데이터를 서버로 잘 전송할 수 있습니다. 
         // - body 안에는 서버로 전송할 array, object 데이터를 집어넣으면 됩니다. 근데 array, object 를 그냥 넣으면 깨지기 때문에 JSON.stringify() 를 써서 문자형태로 (JSON형태로) 바꿔서 전송

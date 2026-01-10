@@ -135,3 +135,29 @@ app.delete('/delete', async (요청, 응답) => {
   // )
   // 응답.redirect('/list')
 })
+
+// app.get('/list/1', async (요청, 응답) => {
+//   result = await db.collection('post').find().limit(5).toArray()
+//   응답.render('list.ejs', {글목록 : result})
+// })
+
+// app.get('/list/2', async (요청, 응답) => {
+//   result = await db.collection('post').find().skip(5).limit(5).toArray()
+//   응답.render('list.ejs', {글목록 : result})
+// })
+
+// 아래는 url 파라미터 문법
+
+// app.get('/list/:id', async (요청, 응답) => {
+//   result = await db.collection('post')
+//   .find().skip(5*(요청.params.id - 1)).limit(5).toArray()
+//   응답.render('list.ejs', {글목록 : result})
+// })
+// // .skip()성능 안좋음
+
+app.get('/list/next/:id', async (요청, 응답) => {
+  result = await db.collection('post')
+  .find({_id : {$gt : new ObjectId(요청.params.id) }}).limit(5).toArray()
+  응답.render('list.ejs', {글목록 : result})
+})
+// skip보다는 빠르다, 단점 페이지네이션버튼 못만들고 다음버튼으로 만들어야한다, 페이지 건너뛰기가 안됨

@@ -94,4 +94,10 @@ URL 파라미터 / query string 의 장점은
 단점은 URL에 정보가 노출 
 그래서 짧고 안중요한 데이터 전송하는데 쓰는게 좋음
 
+새로고침없이 서버로 요청날리고 싶으면 AJAX 사용 
+AJAX로 데이터도 가져올 수 있다보니까 클라이언트사이드 렌더링이라는것도 가능하구요 
+dataset 문법 이용하면 html에 몰래 데이터 숨겨놓을 수도 있습니다. 
+
+페이지네이션, pagination
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
