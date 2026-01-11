@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel ="stylesheet">
+</head>
+<body class="grey-bg">
+
+    <%- include('nav.ejs') %>
+    <!-- ui 재사용 -->
+
+    <form class="form-box" action="/register" method="POST">
+        <h4>회원가입</h4>
+        <input name="username">
+        <!-- passport 라이브러리 사용시 name 속성 맞춰야함, username, password -->
+        <input name="password" type="password">
+        <button type="submit">전송</button>
+    </form>
+  
+</div> 
+    
+</body>
+</html>
+
+<!-- ejs파일 html과 비슷한데 서버데이터를 집어넣을 수 있다 -->

@@ -100,4 +100,12 @@ dataset 문법 이용하면 html에 몰래 데이터 숨겨놓을 수도 있습�
 
 페이지네이션, pagination
 
+passport 라이브러리
+Node.js 환경에서 로그인 기능 구현시
+session, jwt, OAuth 중 원하는 방식 자유롭게 사용할 수 있음
+
+passport는 회원인증 도와주는 메인라이브러리,
+passport-local은 아이디/비번 방식 회원인증쓸 때 쓰는 라이브러리
+express-session은 세션 만드는거 도와주는 라이브러리
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
