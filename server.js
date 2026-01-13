@@ -22,7 +22,7 @@ const session = require('express-session')
 // 라이브러리 사용법 참조
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-const MongoStore = require('connect-mongo')
+const MongoStore = require('connect-mongo').default
 
 app.use(session({
   secret: '암호화에 쓸 비번',
@@ -40,7 +40,7 @@ app.use(session({
   })
 }))
 app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.session())
 
 
 passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
