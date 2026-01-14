@@ -4,6 +4,9 @@ const app = express()
 const methodOverride = require('method-override')
 
 const bcrypt = require('bcrypt')
+
+require('dotenv').config()
+
 const config = require("./dev");
 
 const username = encodeURIComponent(config.DB_USERNAME);
@@ -39,8 +42,29 @@ app.use(session({
     dbName: 'forum',
   })
 }))
-app.use(passport.initialize())
-// app.use(passport.session())
+// app.use(passport.initialize())
+app.use(passport.session())
+
+const { S3Client } = require('@aws-sdk/client-s3')
+const multer = require('multer')
+const multerS3 = require('multer-s3')
+const s3 = new S3Client({
+  region : 'ap-northeast-2',
+  credentials : {
+      accessKeyId : process.env.S3_KEY,
+      secretAccessKey : process.env.S3_SECRET
+  }
+})
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'pswon5894forum',
+    key: function (요청, file, cb) {
+      cb(null, Date.now().toString()) //업로드시 파일명 변경가능
+    }
+  })
+})
 
 
 passport.use(new LocalStrategy(async (입력한아이디, 입력한비번, cb) => {
@@ -72,8 +96,12 @@ passport.deserializeUser( async (user, done) => {
   })
 })
 
+// 비효율 포인트1 세션정보 적인 쿠키가지고 있는 유저가 요청을 날릴 때 마다 실행됨
+// 특정 api에서만 deserializeUser 실행도 가능
+// 그래도 요청이 너무 많이서 db가 부담되면 -redis 사용가능
 
-const { MongoClient, ObjectId } = require('mongodb')
+
+const { MongoClient, ObjectId, deserialize } = require('mongodb')
 
 let db
 const url = `mongodb+srv://${username}:${password}@cluster0.gpc6rzd.mongodb.net/?appName=Cluster0`
@@ -87,13 +115,15 @@ new MongoClient(url).connect().then((client)=>{
   console.log(err)
 })
 
-app.get('/', (요청, 응답) => {
-  응답.sendFile(__dirname + '/index.html')
-}) 
+function checkLogin(요청, 응답){
+  if(!요청.user){
+    응답.send('로그인하세요')
+  }
+}
 
-app.get('/news', (요청, 응답) => {
-  // db.collection('post').insertOne({title : '테스트'})
-  응답.send('오늘 비옴')
+app.get('/', (요청, 응답) => {
+  checkLogin(요청, 응답)
+  응답.sendFile(__dirname + '/index.html')
 }) 
 
 app.get('/list', async (요청, 응답) => {
@@ -122,15 +152,18 @@ app.get('/write', (요청, 응답) => {
   응답.render('write.ejs')
 })
 
-app.post('/add', async (요청, 응답) => {
+app.post('/add', upload.single('img1'), async (요청, 응답) => {
+  // upload.single() 라고 미들웨어를 추가
   // console.log(요청.body)
+
+  // 요청.file.location
 
   try {
     if(요청.body.title == ''){
     응답.send('제목이 비었음, 입력 바람')
   } else {
     await db.collection('post').insertOne({title : 요청.body.title,
-    content : 요청.body.content})
+    content : 요청.body.content, img : 요청.file.location})
     // 응답.send('서버에 저장됨')
     응답.redirect('/list')
   }
@@ -251,3 +284,5 @@ app.post('/register', async (요청, 응답) => {
   })
   응답.redirect('/')
 })
+
+app.use('/shop', require('./routes/shop.js'))

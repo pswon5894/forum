@@ -108,4 +108,44 @@ passport는 회원인증 도와주는 메인라이브러리,
 passport-local은 아이디/비번 방식 회원인증쓸 때 쓰는 라이브러리
 express-session은 세션 만드는거 도와주는 라이브러리
 
+TypeError: MongoStore.create is not a function
+https://stackoverflow.com/questions/66398388/typeerror-mongostore-is-not-a-constructor
+const MongoStore = require('connect-mongo').default; // <-- Use .default here
+
+성능 팁
+
+비효율적으로 보이는 포인트가 몇개 있어보이는데 
+1. deserializeUser는 항상 유저가 서버로 요청을 날릴 때마다 세션용 쿠키가 있으면 실행됩니다.
+그럼 모든 요청을 날릴 때 쓸데없는 DB조회가 발생하는 것 아닙니까  
+지금 메인페이지 같은 곳에 방문할 땐 굳이 저걸 실행할 필요가 없어보입니다. 
+그래서 deserializeUser를 특정 route에서만 실행시키는법 이런거 찾아보시면 약간 더 효율적으로 동작시킬 수 있습니다.
+
+
+2. 근데 그렇게 해도 요청이 너무 많이 들어와서 DB조회가 너무 많이 발생할거같으면 
+Redis 같은 가벼운 메모리기반 데이터베이스를 호스팅받아서 쓰는 사람들도 있습니다.
+하드디스크 보다 램이 훨씬 빠르니까요.
+connect-redis 그런걸 한번 찾아봅시다.
+ 
+3. 유저가 1억명이거나 아니면 백엔드에서 운영중인 마이크로 서비스가 많다면
+세션 말고 JWT 쓰는게 편리할 수도 있습니다. 그건 DB조회할 필요가 없으니까요. 
+그것도 passport로 구현할 수 있는 예제가 많기 때문에 찾아보면 쉽게 구현가능합니다. 
+물론 DB 조회를 안하면 유저를 강제로 로그아웃 시키거나 그런 기능 만드는게 어려울 수 있습니다.
+
+환경변수: 개발자나 컴퓨터에 따라 달라져야하는 변수
+
+CORS(Cross-origin Resource Sharing)란, 교차 출처 리소스 공유의 영문 줄임말로 어떠한 오리진에서 작동하고 있는 웹 어플리케이션이 다른 오리진 서버로의 엑세스를 오리진 사이의 HTTP 요청에 의해 허가를 할 수 있는 체계라고 할 수 있다.
+
+체계적으로는 서버에서 응답 헤더에 리소스를 공유하기 위해 헤더를 추가해 허가하는 형태이다.
+
+CORS의 필요성
+Same-Origin Policy
+웹 시큐리티의 중요한 정책 중 하나로 Same-Origin Policy가 있다. 이는 오리진 사이의 리소스 공유에 제한을 거는 것으로 다음과 같은 위험을 막는 것을 목적으로 하고 있다.
+
+XSS(Corss Site Scripting)
+유저가 웹 사이트에 접속하는 것으로 정상적이지 않은 요청이 클라이언트(웹 브라우저)에서 실행되는 것을 나타내며, Cookie 내에 Session정보를 탈취 당하는 등의 예시가 있다.
+
+CSRF(Cross-Site Request Forgeries)
+웹 어플리케이션의 유저가 의도하지 않은 처리를 웹 어플리케이션에서 실행되는 것을 나타내며, 원래는 로그인한 유저 밖에 실행할 수 없는 처리가 멋대로 되는 등의 예시가 있다.
+https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/CORS
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer

@@ -11,6 +11,16 @@
     <%- include('nav.ejs') %>
     <!-- ui 재사용 -->
 
+    <input class="search">
+    <button class="search-send">검색</button>
+
+    <script>
+        document.querySelector('.search-send').addEventListener('click', function(){
+            document.quer
+            location.href ='/search'
+        })
+    </script>
+
     <!-- <%= JSON.stringify(글목록) %> -->
 <div class="white-bg">
     <% for ( let i =0; i < 글목록.length; i++) { %>
