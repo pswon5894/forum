@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel ="stylesheet">
+</head>
+<body class="grey-bg">
+
+    <%- include('nav.ejs') %>
+    <!-- ui 재사용 -->
+
+    <input class="search">
+    <button class="search-send">검색</button>
+
+    <script>
+        document.querySelector('.search-send').addEventListener('click', function(){
+            let 입력한거 = document.querySelector('.search').value
+            location.href ='/search?val=' + 입력한거
+
+        })
+    </script>
+
+    <h4>검색결과</h4>
+
+
+<div class="white-bg">
+    <% for ( let i =0; i < 글목록.length; i++) { %>
+    <div class="list-box">
+    <h4>
+        <a href="/detail/<%= 글목록[i]._id %>"><%= 글목록[i].title %></a>
+        <a href="/edit/<%= 글목록[i]._id %>">✏️</a>
+        <span class="delete" data-id="<%= 글목록[i]._id %>">🗑️</span>
+
+    </h4>    <!-- 서버사이드 렌더링 -->
+    <p>글내용임</p>
+  </div>
+    <% } %>
+</div>
+
+<a href="/list/next/<%= 글목록[글목록.length - 1].id %>">다음</a>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+<!-- axios 라이브러리 -->
+
+</body>
+</html>
+
+<!-- ejs파일 html과 비슷한데 서버데이터를 집어넣을 수 있다 -->

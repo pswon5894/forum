@@ -16,8 +16,9 @@
 
     <script>
         document.querySelector('.search-send').addEventListener('click', function(){
-            document.quer
-            location.href ='/search'
+            let 입력한거 = document.querySelector('.search').value
+            location.href ='/search?val=' + 입력한거
+            // 쿼리스트링
         })
     </script>
 

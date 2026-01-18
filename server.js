@@ -286,3 +286,14 @@ app.post('/register', async (요청, 응답) => {
 })
 
 app.use('/shop', require('./routes/shop.js'))
+
+app.get('/search', async (요청, 응답) => {
+  // console.log(요청.query.val)
+  let result = await db.collection('post')
+  // .find({title : 요청.query.val}).toArray()
+  //완벽히 똑같아야지만 찾아옴
+  .find({title : { $regex : 요청.query.val } }).toArray()
+  // 정규식을 사용하면 비슷한것 찾아옴, 정규식 문자를 검사하는 식, 문제점 느림
+  응답.render('search.ejs', {글목록 : result })
+})
+
