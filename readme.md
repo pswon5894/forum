@@ -212,3 +212,27 @@ Mongodb는 보통 입출력속도를 빠르게하려고 비정규화하는 DB
 3. 상세페이지 방문시 댓글 가져와서 보여주기
 
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+
+app.post('/comment', async (요청, 응답)=>{
+  let result = await db.collection('comment').insertOne({
+    content : 요청.body.content,
+    writerId : new ObjectId(요청.user._id),
+    writer : 요청.user.username,
+    parentId : new ObjectId(요청.body.parentId)
+  })
+
+  응답.redirect('back')
+})
+
+express 5버전 이상 설치해서 쓰는 요즘 분들은 res.redirect(req.get('Referrer'))
+
+app.post('/comment', async (요청, 응답)=>{
+  let result = await db.collection('comment').insertOne({
+    content : 요청.body.content,
+    writerId : new ObjectId(요청.user._id),
+    writer : 요청.user.username,
+    parentId : new ObjectId(요청.body.parentId)
+  })
+
+  응답.redirect(요청.get('Referrer'))
+})
