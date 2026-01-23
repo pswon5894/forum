@@ -186,7 +186,11 @@ try{
   let result = await db.collection('post').findOne({
      _id: new ObjectId(요청.params.id)
   })
-  응답.render('detail.ejs', {result : result})
+  let result2 = await db.collection('comment').find({
+     parentId: new ObjectId(요청.params.id)
+  }).toArray()
+
+  응답.render('detail.ejs', {result : result, result2 : result2})
   if (result == null){
     응답.status(404).send('잘못된 url')
   }
@@ -331,3 +335,23 @@ app.get('/search', async (요청, 응답) => {
   응답.render('search.ejs', {글목록 : result })
 })
 
+
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "default-src 'self'; connect-src 'self' http://localhost:8080"
+//   );
+//   next();
+// });
+
+
+app.post('/comment', async (요청, 응답)=>{
+  let result = await db.collection('comment').insertOne({
+    content : 요청.body.content,
+    writerId : new ObjectId(요청.user.id),
+    writer : 요청.user.username,
+    parentId : new ObjectId(요청.body.parentId)
+  })
+
+  응답.redirect(요청.get('Referrer'))
+}) 

@@ -15,9 +15,25 @@
     <div class="detail-bg">
         <h4><%= result.title %></h4>
         <p><%= result.content %></p>
+        <hr style="margin-top: 60px">
+
+        <div>
+            <% for (let i=0; i<result2.length; i++) { %>
+                <p><strong><%= result2[i].writer %></strong> <%= result2[i].content %></p>
+            <% } %>
+        </div>
+        <!-- - <% %> : 자바스크립트 실행 (출력 X)
+        - <%= %> : 값 출력 (HTML escape O)
+        - <%- %> : 값 출력 (HTML escape X) -->
+
+        <form action ="/comment" method="POST">
+            <input name="content">
+            <input name="parentId" value="<%= result._id %>"
+            style="display: none">
+            <button>댓글작성</button>
+        </form>
     </div> 
   
-    
 </body>
 </html>
 

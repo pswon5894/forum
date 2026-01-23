@@ -205,4 +205,10 @@ db입출력 속도 낮음, 데이터 정확도 높음
 
 Mongodb는 보통 입출력속도를 빠르게하려고 비정규화하는 DB
 
+댓글기능
+1. 댓글작성 UI에서 전송누르면 댓글 전송
+2. 서버는 댓글을 받으면 db에 저장 (글의 document 필드에 comment를 추가하면?, array나 배열?, document 내부 필드로 만들면 나중에 수가 많아지면 document 저장 한도를 받음, 따라서
+외부 document로 만들고 다른 document에 참조를 받는 종속 방식으로 만들어야함)
+3. 상세페이지 방문시 댓글 가져와서 보여주기
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
