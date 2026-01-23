@@ -148,4 +148,15 @@ CSRF(Cross-Site Request Forgeries)
 웹 어플리케이션의 유저가 의도하지 않은 처리를 웹 어플리케이션에서 실행되는 것을 나타내며, 원래는 로그인한 유저 밖에 실행할 수 없는 처리가 멋대로 되는 등의 예시가 있다.
 https://developer.mozilla.org/ko/docs/Web/HTTP/Guides/CORS
 
+index 검색 속도 향상 가능
+단점 만들면 용량차지, 필요한 필드만 만들자, 인덱스 늘어난만큼 document 수정 발행작업에도 시간소모
+
+// .find({$text : { $search : 요청.query.val } }).explain('executionStats')
+  // console.log(result)
+  //.explain('executionStats') 성능평가
+
+  // 인덱스를 사용하니 정규식이 사용안됨
+  // 정규식을 사용하면 인덱스를 거의 못사용한다
+  // 문자말고 숫자검색 인덱스를 주로하자
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer

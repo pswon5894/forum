@@ -292,8 +292,20 @@ app.get('/search', async (요청, 응답) => {
   let result = await db.collection('post')
   // .find({title : 요청.query.val}).toArray()
   //완벽히 똑같아야지만 찾아옴
-  .find({title : { $regex : 요청.query.val } }).toArray()
+  // .find({title : { $regex : 요청.query.val } }).toArray()
   // 정규식을 사용하면 비슷한것 찾아옴, 정규식 문자를 검사하는 식, 문제점 느림
+
+  .find({$text : { $search : 요청.query.val } }).toArray()
+  // 인덱스를 사용해서 텍스트 오름차순으로 검색
+
+  // .find({$text : { $search : 요청.query.val } }).explain('executionStats')
+  // console.log(result)
+  //.explain('executionStats') 성능평가
+
+  // 인덱스를 사용하니 정규식이 사용안됨
+  // 정규식을 사용하면 인덱스를 거의 못사용한다
+  // 문자말고 숫자검색 인덱스를 주로하자
+
   응답.render('search.ejs', {글목록 : result })
 })
 
