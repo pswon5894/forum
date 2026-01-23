@@ -159,4 +159,42 @@ index 검색 속도 향상 가능
   // 정규식을 사용하면 인덱스를 거의 못사용한다
   // 문자말고 숫자검색 인덱스를 주로하자
 
+  search index 만들면 해결
+다른 데이터베이스에서는 full text index라고 부르기도 함
+검색속도 빠름, 단어 부분검색 가능
+
+search index 동작원리 (한글자는 검색안됨)
+1. 일단 index를 만들 때 document에 있는 문장들을 가져와서 조사나 쓸데없는 불용어들을 다 제거, 그러니까 and or the ~s 이런거 제거
+한국어도 비슷하게 을, 를, 이, 가, 그리고, 또는 이런걸 제거
+_id : 1
+title : 'Seafood restaurnt(s)'
+_id : 2
+title : 'Seafood (and) chicken'
+_id : 3
+title : '(The) game review(!)'
+
+2. 단어들을 다 뽑아서 정렬
+단어들 chicken, game, restaurant, review, seafood
+
+3. 그 다음에 이 단어들이 어떤 document에 등장했는지 그 document id같은걸 함께 단어 옆에 기재
+
+let 검색조건 = [
+  {$search : {
+    index : '사용할 인덱스 이름',
+    text : { query : '검색어', path : '검색할 필드이름' }
+  }},
+  { $sort : { _id : 1 } },
+  { $limit : 10 },
+  { $project : { 제목 : 1, _id : 0 } }
+] 
+
+- $sort 쓰면 검색 결과를 정렬해주는데 _id를 기입하면 _id 순으로 정렬해줍니다.
+안쓰면 기본적으로 score 순으로 정렬됨
+
+- $limit쓰면 결과를 제한해줍니다. 검색결과 중에 맨 위의 10개 document만 가져올 수 있습니다. 
+당연히 { $skip : 5 } 이거 연산자도 쓸 수 있습니다. 그래서 이런거 쓰면 페이지네이션도 구현가능
+
+- $project쓰면 찾아온 결과 중에 원하는 필드만 가져오라고 걸러줄 수 있습니다. 
+예를 들어 {title : 1, content : 0} 이러면 title은 보여줌, content는 숨김이라는 뜻입니다.
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer

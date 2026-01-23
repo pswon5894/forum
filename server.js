@@ -289,13 +289,14 @@ app.use('/shop', require('./routes/shop.js'))
 
 app.get('/search', async (요청, 응답) => {
   // console.log(요청.query.val)
-  let result = await db.collection('post')
+  // let result = await db.collection('post')
   // .find({title : 요청.query.val}).toArray()
   //완벽히 똑같아야지만 찾아옴
   // .find({title : { $regex : 요청.query.val } }).toArray()
   // 정규식을 사용하면 비슷한것 찾아옴, 정규식 문자를 검사하는 식, 문제점 느림
 
-  .find({$text : { $search : 요청.query.val } }).toArray()
+  // let result = await db.collection('post')
+  // .find({$text : { $search : 요청.query.val } }).toArray()
   // 인덱스를 사용해서 텍스트 오름차순으로 검색
 
   // .find({$text : { $search : 요청.query.val } }).explain('executionStats')
@@ -305,6 +306,17 @@ app.get('/search', async (요청, 응답) => {
   // 인덱스를 사용하니 정규식이 사용안됨
   // 정규식을 사용하면 인덱스를 거의 못사용한다
   // 문자말고 숫자검색 인덱스를 주로하자
+
+  let 검색조건 = [
+    {$search : {
+      index : 'title_index',
+      text : { query : 요청.query.val, path : 'title' }
+    }},
+    {$sort : {_id}}
+  ]
+
+  let result = await db.collection('post')
+  .aggregate(검색조건).toArray()
 
   응답.render('search.ejs', {글목록 : result })
 })
