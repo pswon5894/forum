@@ -197,4 +197,12 @@ let 검색조건 = [
 - $project쓰면 찾아온 결과 중에 원하는 필드만 가져오라고 걸러줄 수 있습니다. 
 예를 들어 {title : 1, content : 0} 이러면 title은 보여줌, content는 숨김이라는 뜻입니다.
 
+관계형 db: 글에 유저의 _id만 적어둠 (정규화)
+비관계형 db: 글에 온갖거 다 적음(비정규화)
+
+db입출력 속도 높음, 데이터 정확도 낮음-mongodb
+db입출력 속도 낮음, 데이터 정확도 높음
+
+Mongodb는 보통 입출력속도를 빠르게하려고 비정규화하는 DB
+
 ## 에러, BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
